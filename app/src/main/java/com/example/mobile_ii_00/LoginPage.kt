@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import androidx.compose.material3.Label
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
@@ -57,7 +59,7 @@ fun LoginPage() {
             painter = painterResource(id = R.drawable.logo_green_with_icon),
             contentDescription = "App Logo",
             modifier = Modifier
-                  .size(120.dp)
+                .size(120.dp)
                 .padding(bottom = 16.dp)
         )
     }
@@ -76,13 +78,13 @@ fun LoginPage() {
             fontFamily = poppinsBold,
             modifier = Modifier
                 .fillMaxWidth() // Stretch horizontally (optional for full width)
-                .padding(horizontal = 16.dp) // Add horizontal padding (optional)
+
         )
         Text(
             "Login to Your Account!",
             modifier = Modifier
                 .fillMaxWidth() // Stretch horizontally (optional for full width)
-                .padding(horizontal = 16.dp) // Add horizontal padding (optional)
+
         )
         Spacer(modifier = Modifier.size(40.dp))
         // TextField untuk input username
@@ -113,5 +115,12 @@ fun LoginPage() {
         ) {
             Text("LOGIN", fontFamily = poppinsBold)
         }
+
+        Spacer(Modifier.size(12.dp))
+        Row {
+            Text("Don't Have an Account yet?  ")
+            Text("Create an Account", color = EzemGreen, fontWeight = FontWeight.Bold)
+        }
+
     }
 }
