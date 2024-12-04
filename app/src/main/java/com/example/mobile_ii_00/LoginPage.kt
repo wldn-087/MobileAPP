@@ -5,11 +5,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Label
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -24,9 +27,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.mobile_ii_00.ui.theme.EzemGreen
 import com.example.mobile_ii_00.ui.theme.MOBILE_II_00Theme
 
 
@@ -36,13 +45,9 @@ fun LoginPage() {
     // State to hold the text
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
-
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {  }
+    val poppinsBold = FontFamily(
+        Font(R.font.poppins_bold, FontWeight.Bold)
+    )
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally, // Mengatur agar semua elemen berada di tengah horizontal
@@ -52,7 +57,7 @@ fun LoginPage() {
             painter = painterResource(id = R.drawable.logo_green_with_icon),
             contentDescription = "App Logo",
             modifier = Modifier
-                .size(120.dp)
+                  .size(120.dp)
                 .padding(bottom = 16.dp)
         )
     }
@@ -65,7 +70,22 @@ fun LoginPage() {
         verticalArrangement = Arrangement.Center
     ) {
 
-// TextField untuk input username
+        Text(
+            "LOGIN",
+            fontSize = 24.sp,
+            fontFamily = poppinsBold,
+            modifier = Modifier
+                .fillMaxWidth() // Stretch horizontally (optional for full width)
+                .padding(horizontal = 16.dp) // Add horizontal padding (optional)
+        )
+        Text(
+            "Login to Your Account!",
+            modifier = Modifier
+                .fillMaxWidth() // Stretch horizontally (optional for full width)
+                .padding(horizontal = 16.dp) // Add horizontal padding (optional)
+        )
+        Spacer(modifier = Modifier.size(40.dp))
+        // TextField untuk input username
         OutlinedTextField(
             value = username.value,
             onValueChange = { newText -> username.value = newText },
@@ -81,12 +101,17 @@ fun LoginPage() {
             label = { Text("Password") }, // Pastikan label menggunakan lambda
             modifier = Modifier.fillMaxWidth()
         )
+        Spacer(modifier = Modifier.size(40.dp))
         Button(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .width(32.dp),
             onClick = {},
-
+            colors = ButtonDefaults.buttonColors(
+                containerColor = EzemGreen
+            )
         ) {
-            Text("Login")
+            Text("LOGIN", fontFamily = poppinsBold)
         }
     }
 }

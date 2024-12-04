@@ -2,6 +2,9 @@ package com.example.mobile_ii_00.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Grenn = Color(0xFF1E9605)
-val LightGreen = Color(0xFF1FCE35)
-val LightestGreen = Color(0xFF5FFF58)
+val EzemGreen = Color(0xFF156545)
+val EzemLightGreen = Color(0xFF37765D)
+val EzemBlack = Color(0xFF222325)
+val EzemGray = Color(0x00969696)
+val EzemLightGray = Color(0xFFC8C8C8)
+val EzemWhite = Color(0xFFFFFFFF)
