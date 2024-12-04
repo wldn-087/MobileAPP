@@ -1,9 +1,9 @@
 package com.example.mobile_ii_00
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,17 +12,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text2.input.TextFieldBuffer
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Label
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,14 +29,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobile_ii_00.ui.theme.EzemGreen
-import com.example.mobile_ii_00.ui.theme.MOBILE_II_00Theme
 
 
 @Preview(showBackground = true)
@@ -88,21 +83,27 @@ fun LoginPage() {
         )
         Spacer(modifier = Modifier.size(40.dp))
         // TextField untuk input username
-        OutlinedTextField(
+//        OutlinedTextField(
+//            value = username.value,
+//            onValueChange = { newText -> username.value = newText },
+//            singleLine = true,
+//            label = { Text("Username") }, // Pastikan label menggunakan lambda
+//            modifier = Modifier.fillMaxWidth()
+//        )
+//        OutlinedTextField(
+//            value = password.value,
+//            onValueChange = { newText -> password.value = newText },
+//            singleLine = true,
+//            visualTransformation = PasswordVisualTransformation(),
+//            label = { Text("Password") }, // Pastikan label menggunakan lambda
+//            modifier = Modifier.fillMaxWidth()
+//        )
+        TextField(
             value = username.value,
-            onValueChange = { newText -> username.value = newText },
-            singleLine = true,
-            label = { Text("Username") }, // Pastikan label menggunakan lambda
-            modifier = Modifier.fillMaxWidth()
-        )
-        OutlinedTextField(
-            value = password.value,
-            onValueChange = { newText -> password.value = newText },
-            singleLine = true,
-            visualTransformation = PasswordVisualTransformation(),
-            label = { Text("Password") }, // Pastikan label menggunakan lambda
-            modifier = Modifier.fillMaxWidth()
-        )
+            onValueChange = { newText -> username.value =  newtext}
+            modifier = Modifier
+                .fillMaxWidth(),)
+
         Spacer(modifier = Modifier.size(40.dp))
         Button(
             modifier = Modifier
@@ -124,3 +125,4 @@ fun LoginPage() {
 
     }
 }
+
