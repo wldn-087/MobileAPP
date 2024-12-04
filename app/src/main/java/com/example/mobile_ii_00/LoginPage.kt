@@ -41,7 +41,7 @@ import com.example.mobile_ii_00.ui.theme.EzemGreen
 import com.example.mobile_ii_00.ui.theme.MOBILE_II_00Theme
 
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun LoginPage() {
     // State to hold the text
