@@ -1,8 +1,6 @@
 package com.example.mobile_ii_00
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,12 +16,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -46,9 +41,25 @@ import androidx.navigation.NavController
 import com.example.mobile_ii_00.ui.theme.EzemGreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-@Preview(showBackground = true)
 @Composable
 fun RegisterScreen(navController: NavController){
+    RegisterScreenPrevew(
+        loginBtn = {
+            navController.navigate("login")
+        }
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewRegisterScreen(){
+    RegisterScreenPrevew(
+        loginBtn = {}
+    )
+}
+
+@Composable
+fun RegisterScreenPrevew(loginBtn: () -> Unit){
 
     val systemUiController = rememberSystemUiController()
 
@@ -107,7 +118,12 @@ fun RegisterScreen(navController: NavController){
             },
             modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
             singleLine = true,
-            label = { Text("Username") }
+            label = { Text("Username") },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = EzemGreen,
+                cursorColor = EzemGreen,
+                focusedLabelColor = EzemGreen
+            )
         )
         OutlinedTextField(
             value = fullName.value,
@@ -116,7 +132,12 @@ fun RegisterScreen(navController: NavController){
             },
             modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
             singleLine = true,
-            label = { Text("Full Name") }
+            label = { Text("Full Name") },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = EzemGreen,
+                cursorColor = EzemGreen,
+                focusedLabelColor = EzemGreen
+            )
         )
 
         val emailRegex = android.util.Patterns.EMAIL_ADDRESS
@@ -132,6 +153,11 @@ fun RegisterScreen(navController: NavController){
             singleLine = true,
             label = { Text("Email") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = EzemGreen,
+                cursorColor = EzemGreen,
+                focusedLabelColor = EzemGreen
+            ),
             isError = isEmailError,
             supportingText = {
                 if (isEmailError) {
@@ -150,7 +176,12 @@ fun RegisterScreen(navController: NavController){
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
             label = { Text("Password") },
-            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
+            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = EzemGreen,
+                cursorColor = EzemGreen,
+                focusedLabelColor = EzemGreen
+            )
         )
         OutlinedTextField(
             value = confirmPass.value,
@@ -158,7 +189,12 @@ fun RegisterScreen(navController: NavController){
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
             label = { Text("Confirm Password") },
-            modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp)
+            modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = EzemGreen,
+                cursorColor = EzemGreen,
+                focusedLabelColor = EzemGreen
+            )
         )
 
         Button(
@@ -178,7 +214,7 @@ fun RegisterScreen(navController: NavController){
             Text("Alreaady have an Account?  ")
             Box(modifier = Modifier
                 .clickable {
-                    navController.navigate("login")
+                    loginBtn()
                 }){
                 Text("Login Here", color = EzemGreen, fontWeight = FontWeight.Bold)
             }
