@@ -3,7 +3,9 @@ package com.example.mobile_ii_00
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +18,7 @@ import androidx.compose.foundation.text2.input.TextFieldBuffer
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
@@ -30,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -83,26 +87,22 @@ fun LoginPage() {
         )
         Spacer(modifier = Modifier.size(40.dp))
         // TextField untuk input username
-//        OutlinedTextField(
-//            value = username.value,
-//            onValueChange = { newText -> username.value = newText },
-//            singleLine = true,
-//            label = { Text("Username") }, // Pastikan label menggunakan lambda
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        OutlinedTextField(
-//            value = password.value,
-//            onValueChange = { newText -> password.value = newText },
-//            singleLine = true,
-//            visualTransformation = PasswordVisualTransformation(),
-//            label = { Text("Password") }, // Pastikan label menggunakan lambda
-//            modifier = Modifier.fillMaxWidth()
-//        )
-        TextField(
+        OutlinedTextField(
             value = username.value,
-            onValueChange = { newText -> username.value =  newtext}
-            modifier = Modifier
-                .fillMaxWidth(),)
+            onValueChange = { newText -> username.value = newText },
+            singleLine = true,
+            label = { Text("Username") }, // Pastikan label menggunakan lambda
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = password.value,
+            onValueChange = { newText -> password.value = newText },
+            singleLine = true,
+            visualTransformation = PasswordVisualTransformation(),
+            label = { Text("Password") }, // Pastikan label menggunakan lambda
+            modifier = Modifier.fillMaxWidth()
+        )
+
 
         Spacer(modifier = Modifier.size(40.dp))
         Button(
@@ -120,9 +120,15 @@ fun LoginPage() {
         Spacer(Modifier.size(12.dp))
         Row {
             Text("Don't Have an Account yet?  ")
-            Text("Create an Account", color = EzemGreen, fontWeight = FontWeight.Bold)
+            Box(modifier = Modifier
+                .clickable {
+
+                }){
+                Text("Create an Account", color = EzemGreen, fontWeight = FontWeight.Bold)
+            }
         }
 
     }
 }
+
 
