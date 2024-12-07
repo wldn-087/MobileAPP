@@ -2,6 +2,7 @@ package com.example.mobile_ii_00
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -32,6 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,7 +46,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun RegisterScreen(navController: NavController){
-    RegisterScreenPrevew(
+    RegisterScreenPreview(
         loginBtn = {
             navController.navigate("login")
         }
@@ -53,13 +56,13 @@ fun RegisterScreen(navController: NavController){
 @Preview(showBackground = true)
 @Composable
 fun PreviewRegisterScreen(){
-    RegisterScreenPrevew(
+    RegisterScreenPreview(
         loginBtn = {}
     )
 }
 
 @Composable
-fun RegisterScreenPrevew(loginBtn: () -> Unit){
+fun RegisterScreenPreview(loginBtn: () -> Unit){
 
     val systemUiController = rememberSystemUiController()
 
@@ -84,7 +87,7 @@ fun RegisterScreenPrevew(loginBtn: () -> Unit){
 
     ) {
         Image(
-            painter = painterResource(id = R.drawable.logo_green_with_icon),
+            painter = painterResource(if(isSystemInDarkTheme()) R.drawable.logo_white else R.drawable.logo_green_with_icon),
             contentDescription = "App Logo",
             modifier = Modifier
                 .size(120.dp)
@@ -118,6 +121,7 @@ fun RegisterScreenPrevew(loginBtn: () -> Unit){
             },
             modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
             singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             label = { Text("Username") },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = EzemGreen,
@@ -132,6 +136,7 @@ fun RegisterScreenPrevew(loginBtn: () -> Unit){
             },
             modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
             singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             label = { Text("Full Name") },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = EzemGreen,
@@ -152,7 +157,7 @@ fun RegisterScreenPrevew(loginBtn: () -> Unit){
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             label = { Text("Email") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email).copy(imeAction = ImeAction.Next),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = EzemGreen,
                 cursorColor = EzemGreen,
@@ -165,8 +170,6 @@ fun RegisterScreenPrevew(loginBtn: () -> Unit){
                         text = "Invalid email format",
                         color = Color.Red
                     )
-                }else{
-                    null
                 }
             }
         )
@@ -174,6 +177,7 @@ fun RegisterScreenPrevew(loginBtn: () -> Unit){
             value = password.value,
             onValueChange = { newText -> password.value = newText },
             singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             visualTransformation = PasswordVisualTransformation(),
             label = { Text("Password") },
             modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
@@ -187,6 +191,7 @@ fun RegisterScreenPrevew(loginBtn: () -> Unit){
             value = confirmPass.value,
             onValueChange = { newText -> confirmPass.value = newText },
             singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
             visualTransformation = PasswordVisualTransformation(),
             label = { Text("Confirm Password") },
             modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp),

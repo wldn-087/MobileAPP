@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -51,7 +52,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun LoginPage(navController: NavController){
-    LoginPagePrevew (
+    LoginPagePreview (
         registerBtn = {
             navController.navigate("register")
         },
@@ -62,18 +63,16 @@ fun LoginPage(navController: NavController){
 @Preview(showBackground = true)
 @Composable
 fun PreviewLoginPage(){
-    LoginPagePrevew(
+    LoginPagePreview(
         registerBtn = {},login = {}
     )
 }
 
 @Composable
-fun LoginPagePrevew(registerBtn: () -> Unit, login: () -> Unit) {
+fun LoginPagePreview(registerBtn: () -> Unit, login: () -> Unit) {
     // State to hold the text
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
-    val usernameFocusRequester = FocusRequester()
-    val passwordFocusRequester = FocusRequester()
     val poppinsBold = FontFamily(
         Font(R.font.poppins_bold, FontWeight.Bold)
     )
@@ -92,7 +91,7 @@ fun LoginPagePrevew(registerBtn: () -> Unit, login: () -> Unit) {
 
     ) {
         Image(
-            painter = painterResource(id = R.drawable.logo_green_with_icon),
+            painter = painterResource(if (isSystemInDarkTheme()) R.drawable.logo_white else R.drawable.logo_green_with_icon),
             contentDescription = "App Logo",
             modifier = Modifier
                 .size(120.dp)
@@ -129,37 +128,27 @@ fun LoginPagePrevew(registerBtn: () -> Unit, login: () -> Unit) {
             onValueChange = { newText -> username.value = newText },
             singleLine = true,
             label = { Text("Username") }, // Pastikan label menggunakan lambda
-            modifier = Modifier.fillMaxWidth()
-                .padding(bottom = 16.dp)
-                .focusRequester(usernameFocusRequester),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions(
-                onNext = { passwordFocusRequester.requestFocus() }
-            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = EzemGreen,
                 cursorColor = EzemGreen,
                 focusedLabelColor = EzemGreen
             )
         )
+
+
         OutlinedTextField(
             value = password.value,
             onValueChange = { newText -> password.value = newText },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
             label = { Text("Password") }, // Pastikan label menggunakan lambda
-            modifier = Modifier.fillMaxWidth()
-                .focusRequester(passwordFocusRequester),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-
-                }
-            ),
+            modifier = Modifier
+                .fillMaxWidth(),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = EzemGreen,
                 cursorColor = EzemGreen,
@@ -186,14 +175,14 @@ fun LoginPagePrevew(registerBtn: () -> Unit, login: () -> Unit) {
         Spacer(Modifier.size(12.dp))
         Row {
             Text("Don't Have an Account yet?  ")
-            Box(modifier = Modifier
-                .clickable {
+            Text("Create an Account",
+                color = EzemGreen,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.clickable {
                     registerBtn()
-                }){
-                Text("Create an Account", color = EzemGreen, fontWeight = FontWeight.Bold)
-            }
+                }
+            )
         }
-
     }
 }
 

@@ -32,8 +32,13 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
+fun CheckDarkMode(): Boolean {
+    return isSystemInDarkTheme()
+}
+
+@Composable
 fun MOBILE_II_00Theme(
-    darkTheme: Boolean = false,
+    darkTheme: Boolean = CheckDarkMode(),
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
