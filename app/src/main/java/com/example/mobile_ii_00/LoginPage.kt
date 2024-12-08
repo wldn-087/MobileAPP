@@ -56,7 +56,9 @@ fun LoginPage(navController: NavController){
         registerBtn = {
             navController.navigate("register")
         },
-        login = {}
+        login = {
+            navController.navigate("main")
+        }
     )
 }
 
@@ -163,7 +165,7 @@ fun LoginPagePreview(registerBtn: () -> Unit, login: () -> Unit) {
                 .fillMaxWidth()
                 .width(32.dp),
             onClick = {
-
+                login()
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = EzemGreen

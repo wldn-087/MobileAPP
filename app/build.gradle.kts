@@ -40,7 +40,7 @@ android {
 }
 
 dependencies {
-    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
+    implementation (libs.accompanist.systemuicontroller)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
