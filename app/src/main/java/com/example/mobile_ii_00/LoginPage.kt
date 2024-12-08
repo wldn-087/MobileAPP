@@ -47,8 +47,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.mobile_ii_00.model.AuthDTO
+import com.example.mobile_ii_00.model.LoginResponse
+import com.example.mobile_ii_00.network.RetrofitInstance
 import com.example.mobile_ii_00.ui.theme.EzemGreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.Callback
+
 
 @Composable
 fun LoginPage(navController: NavController){
@@ -57,7 +64,7 @@ fun LoginPage(navController: NavController){
             navController.navigate("register")
         },
         login = {
-            navController.navigate("main")
+            username, password -> Login(username, password)
         }
     )
 }
@@ -66,12 +73,40 @@ fun LoginPage(navController: NavController){
 @Composable
 fun PreviewLoginPage(){
     LoginPagePreview(
-        registerBtn = {},login = {}
+        registerBtn = {},
+        login = {
+            username, password -> Login(username, password)
+        }
     )
 }
 
+fun Login(username: String, password: String) {
+    var isLoading = true
+
+    isLoading = true
+    val authDTO = AuthDTO(username, password)
+    RetrofitInstance.api.login(authDTO).enqueue(object : Callback<LoginResponse>{
+        override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+            isLoading = false
+            if (response.isSuccessful) {
+                // Login berhasil, simpan token atau navigasikan ke layar berikutnya
+                val token = response.body()?.token
+                println("Login berhasil: Token - $token")
+            } else {
+                // Tampilkan pesan kesalahan
+                println("Login gagal: ${response.message()}")
+            }
+        }
+
+        override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+            isLoading = false
+            println("Terjadi kesalahan: ${t.message}")
+        }
+    })
+}
+
 @Composable
-fun LoginPagePreview(registerBtn: () -> Unit, login: () -> Unit) {
+fun LoginPagePreview(registerBtn: () -> Unit, login: (username: String, password: String) -> Unit) {
     // State to hold the text
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -165,7 +200,9 @@ fun LoginPagePreview(registerBtn: () -> Unit, login: () -> Unit) {
                 .fillMaxWidth()
                 .width(32.dp),
             onClick = {
-                login()
+                if(username.value.isNotEmpty() && password.value.isNotEmpty()){
+                    login(username.value, password.value)
+                }
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = EzemGreen
