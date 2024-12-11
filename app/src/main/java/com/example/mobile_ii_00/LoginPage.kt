@@ -1,5 +1,7 @@
 package com.example.mobile_ii_00
 
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -52,7 +54,14 @@ import com.example.mobile_ii_00.model.LoginResponse
 import com.example.mobile_ii_00.network.RetrofitInstance
 import com.example.mobile_ii_00.ui.theme.EzemGreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.io.OutputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 @Composable
 fun LoginPage(navController: NavController){
@@ -61,10 +70,13 @@ fun LoginPage(navController: NavController){
             navController.navigate("register")
         },
         login = {
-            username, password ->
+                username, password -> login(username, password, action = {
+                    navController.navigate("main")
+        })
         }
     )
 }
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -72,12 +84,46 @@ fun PreviewLoginPage(){
     LoginPagePreview(
         registerBtn = {},
         login = {
-            username, password ->
+            _, _ ->
         }
     )
 }
 
+fun login(username: String, password: String, action : () -> Unit){
+    CoroutineScope(Dispatchers.IO).launch {
+        val apiUrl = "http://192.168.0.171:5000/api/auth/"
+        try{
+            val url = URL(apiUrl)
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.setRequestProperty("Content-Type", "application/json")
+            connection.doOutput = true
 
+            val requestBody = "{\"username\": \"$username\", \"password\": \"$password\"}"
+            val outputStream : OutputStream = connection.outputStream
+            outputStream.write(requestBody.toByteArray())
+            outputStream.flush()
+
+            val responseCode = connection.responseCode
+            if(responseCode == 200){
+                val reader = BufferedReader(InputStreamReader(connection.inputStream))
+                val responseBody = reader.readLine()
+                reader.close()
+
+                action()
+
+            } else if (responseCode == 404) {
+                println("User not Found")
+            } else {
+                println("Eror")
+            }
+            connection.disconnect()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            println("fatal Eror")
+        }
+    }
+}
 
 @Composable
 fun LoginPagePreview(registerBtn: () -> Unit, login: (username: String, password: String) -> Unit) {
@@ -174,7 +220,7 @@ fun LoginPagePreview(registerBtn: () -> Unit, login: (username: String, password
                 .fillMaxWidth()
                 .width(32.dp),
             onClick = {
-
+                login(username.value, password.value)
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = EzemGreen
