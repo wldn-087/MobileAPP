@@ -1,6 +1,7 @@
 package com.example.mobile_ii_00
 
 import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -57,6 +58,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStream
@@ -64,7 +66,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 @Composable
-fun LoginPage(navController: NavController){
+fun LoginPage(navController: NavController, toast: () -> Unit){
     LoginPagePreview (
         registerBtn = {
             navController.navigate("register")
@@ -110,7 +112,9 @@ fun login(username: String, password: String, action : () -> Unit){
                 val responseBody = reader.readLine()
                 reader.close()
 
-                action()
+                withContext(Dispatchers.Main){
+                    action()
+                }
 
             } else if (responseCode == 404) {
                 println("User not Found")

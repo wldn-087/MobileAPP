@@ -1,6 +1,7 @@
 package com.example.mobile_ii_00
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -30,7 +31,10 @@ class MainActivity : ComponentActivity() {
 
             NavHost(navController = navController, startDestination = "login") {
                 composable("register") { RegisterScreen(navController) }
-                composable("login") { LoginPage(navController) }
+                composable("login") { LoginPage(navController,
+                    toast = {
+                        Toast.makeText(this@MainActivity, "Login Succes", Toast.LENGTH_LONG).show()
+                    }) }
                 composable("main") { MainScreen(navController) }
             }
         }
