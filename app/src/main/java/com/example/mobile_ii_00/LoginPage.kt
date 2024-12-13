@@ -1,5 +1,6 @@
 package com.example.mobile_ii_00
 
+import android.content.Context
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AppCompatActivity
@@ -66,13 +67,13 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 @Composable
-fun LoginPage(navController: NavController, toast: () -> Unit){
+fun LoginPage(navController: NavController, context: Context){
     LoginPagePreview (
         registerBtn = {
             navController.navigate("register")
         },
         login = {
-                username, password -> login(username, password, action = {
+                username, password -> login(username, password, context, action = {
                     navController.navigate("main")
         })
         }
@@ -91,7 +92,7 @@ fun PreviewLoginPage(){
     )
 }
 
-fun login(username: String, password: String, action : () -> Unit){
+fun login(username: String, password: String, context: Context, action : () -> Unit){
     CoroutineScope(Dispatchers.IO).launch {
         val apiUrl = "http://"+ "@string/domain" +":5000/api/auth/"
         try{
@@ -113,10 +114,12 @@ fun login(username: String, password: String, action : () -> Unit){
                 reader.close()
 
                 withContext(Dispatchers.Main){
+                    Toast.makeText(context, responseBody, LENGTH_LONG).show()
                     action()
                 }
 
             } else if (responseCode == 404) {
+                Toast.makeText(context, "User not Found", LENGTH_LONG).show()
                 println("User not Found")
             } else {
                 println("Eror")

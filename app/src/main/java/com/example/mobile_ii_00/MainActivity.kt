@@ -32,9 +32,7 @@ class MainActivity : ComponentActivity() {
             NavHost(navController = navController, startDestination = "login") {
                 composable("register") { RegisterScreen(navController) }
                 composable("login") { LoginPage(navController,
-                    toast = {
-                        Toast.makeText(this@MainActivity, "Login Succes", Toast.LENGTH_LONG).show()
-                    }) }
+                    context = this@MainActivity) }
                 composable("main") { MainScreen(navController) }
             }
         }
