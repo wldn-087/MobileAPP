@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">EzemKofi</string>
+    <string name="domain">192.168.43.22</string>
 </resources>

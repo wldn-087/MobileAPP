@@ -93,7 +93,7 @@ fun PreviewLoginPage(){
 
 fun login(username: String, password: String, action : () -> Unit){
     CoroutineScope(Dispatchers.IO).launch {
-        val apiUrl = "http://192.168.0.171:5000/api/auth/"
+        val apiUrl = "http://"+ "@string/domain" +":5000/api/auth/"
         try{
             val url = URL(apiUrl)
             val connection = url.openConnection() as HttpURLConnection
