@@ -20,6 +20,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun MainScreen(navController: NavController){
+    val token = navController.currentBackStackEntry?.arguments?.getString("token")
     MainScreenDesign()
 }
 

@@ -18,7 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mobile_ii_00.ui.theme.MOBILE_II_00Theme
 
-
+val domain = "192.168.79.62"
 //https://drive.google.com/drive/folders/1k5obinAL9J02DvZou1-z5-rZqWUpiqud?usp=sharing&pli=1
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

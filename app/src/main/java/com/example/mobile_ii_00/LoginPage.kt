@@ -1,6 +1,9 @@
 package com.example.mobile_ii_00
 
 import android.content.Context
+import android.content.res.Resources
+import android.provider.Settings.Global.getString
+import android.provider.Settings.Global.putString
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AppCompatActivity
@@ -42,6 +45,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -50,12 +54,16 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
+import androidx.navigation.NavArgs
 import androidx.navigation.NavController
+import androidx.navigation.navArgument
 import com.example.mobile_ii_00.model.AuthDTO
 import com.example.mobile_ii_00.model.LoginResponse
 import com.example.mobile_ii_00.network.RetrofitInstance
 import com.example.mobile_ii_00.ui.theme.EzemGreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -73,8 +81,9 @@ fun LoginPage(navController: NavController){
             navController.navigate("register")
         },
         login = {
-                username, password -> login(username, password, action = {
-                    navController.navigate("main")
+                username, password -> login(username, password, action = { token ->
+            navController.navigate("main", bundleOf("token" to token))
+                })
         })
         }
     )
@@ -92,9 +101,9 @@ fun PreviewLoginPage(){
     )
 }
 
-fun login(username: String, password: String, action : () -> Unit){
+fun login(username: String, password: String, action : (String) -> Unit){
     CoroutineScope(Dispatchers.IO).launch {
-        val apiUrl = "http://"+ "@string/domain" +":5000/api/auth/"
+        val apiUrl = "http://$domain:5000/api/auth/"
         try{
             val url = URL(apiUrl)
             val connection = url.openConnection() as HttpURLConnection
@@ -113,8 +122,11 @@ fun login(username: String, password: String, action : () -> Unit){
                 val responseBody = reader.readLine()
                 reader.close()
 
+                val data = Gson().fromJson(responseBody, LoginResponse::class.java)
+                val token = data.token
+
                 withContext(Dispatchers.Main){
-                    action()
+                    action(token)
                 }
 
             } else if (responseCode == 404) {
