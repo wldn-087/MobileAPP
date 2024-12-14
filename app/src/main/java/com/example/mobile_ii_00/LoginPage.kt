@@ -211,12 +211,14 @@ fun LoginPage(navController: NavController) {
                                 usernameFocusRequester.requestFocus()
                             }
                         } else {
-                            println("Error")
+                            isError.value = true
+                            erorMassage.value = "Something went Wrong :(  !"
                         }
                         connection.disconnect()
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        println("Fatal Error")
+                        isError.value = true
+                        erorMassage.value = "Something went Wrong :(  !"
                     }
                 }
             },

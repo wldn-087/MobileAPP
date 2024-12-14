@@ -285,12 +285,14 @@ fun RegisterScreen(navController: NavController){
                                 println("Eror")
                             }
                         } else {
-                            println("Error: Unexpected response code $responseCode")
+                            isError.value = true
+                            erorMessage.value = "Something went Wrong :(  !"
                         }
                         connection.disconnect()
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        println("Fatal Error")
+                        isError.value = true
+                        erorMessage.value = "Something went Wrong :(  !"
                     }
                 }
             },
