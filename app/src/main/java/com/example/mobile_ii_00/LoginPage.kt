@@ -197,10 +197,10 @@ fun LoginPage(navController: NavController) {
                             val responseBody = reader.readLine()
                             reader.close()
 
-                            token = responseBody.toString()
-
                             withContext(Dispatchers.Main) {
                                 isError.value = false
+                                token = responseBody.toString()
+                                println(token)
                                 navController.navigate("main")
                             }
 
