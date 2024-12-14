@@ -20,7 +20,6 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun MainScreen(navController: NavController){
-    val token = navController.currentBackStackEntry?.arguments?.getString("token")
     MainScreenDesign()
 }
 
@@ -38,21 +37,7 @@ fun MainScreenDesign(){
         systemUiController.setStatusBarColor(
             color = EzemGreen,
         )
-
     }
 
-    val items = List(100) { "Item $it" }
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
 
-
-        items(items) { item ->
-            Text( item, modifier = Modifier.padding(8.dp))
-        }
-
-    }
 }

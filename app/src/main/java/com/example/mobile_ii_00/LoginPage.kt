@@ -75,78 +75,13 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 @Composable
-fun LoginPage(navController: NavController){
-    LoginPagePreview (
-        registerBtn = {
-            navController.navigate("register")
-        },
-        login = {
-                username, password -> login(username, password, action = { token ->
-            navController.navigate("main", bundleOf("token" to token))
-                })
-        })
-        }
-    )
-}
-
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewLoginPage(){
-    LoginPagePreview(
-        registerBtn = {},
-        login = {
-            _, _ ->
-        }
-    )
-}
-
-fun login(username: String, password: String, action : (String) -> Unit){
-    CoroutineScope(Dispatchers.IO).launch {
-        val apiUrl = "http://$domain:5000/api/auth/"
-        try{
-            val url = URL(apiUrl)
-            val connection = url.openConnection() as HttpURLConnection
-            connection.requestMethod = "POST"
-            connection.setRequestProperty("Content-Type", "application/json")
-            connection.doOutput = true
-
-            val requestBody = "{\"username\": \"$username\", \"password\": \"$password\"}"
-            val outputStream : OutputStream = connection.outputStream
-            outputStream.write(requestBody.toByteArray())
-            outputStream.flush()
-
-            val responseCode = connection.responseCode
-            if(responseCode == 200){
-                val reader = BufferedReader(InputStreamReader(connection.inputStream))
-                val responseBody = reader.readLine()
-                reader.close()
-
-                val data = Gson().fromJson(responseBody, LoginResponse::class.java)
-                val token = data.token
-
-                withContext(Dispatchers.Main){
-                    action(token)
-                }
-
-            } else if (responseCode == 404) {
-                println("User not Found")
-            } else {
-                println("Eror")
-            }
-            connection.disconnect()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            println("fatal Eror")
-        }
-    }
-}
-
-@Composable
-fun LoginPagePreview(registerBtn: () -> Unit, login: (username: String, password: String) -> Unit) {
-    // State to hold the text
+fun LoginPage(navController: NavController) {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    val isError = remember { mutableStateOf(false) }
+    val usernameFocusRequester = remember { FocusRequester() }
+    val erorMassage = remember { mutableStateOf("") }
+
     val poppinsBold = FontFamily(
         Font(R.font.poppins_bold, FontWeight.Bold)
     )
@@ -180,7 +115,6 @@ fun LoginPagePreview(registerBtn: () -> Unit, login: (username: String, password
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
         Text(
             "LOGIN",
             fontSize = 24.sp,
@@ -196,68 +130,112 @@ fun LoginPagePreview(registerBtn: () -> Unit, login: (username: String, password
 
         )
         Spacer(modifier = Modifier.size(40.dp))
-        // TextField untuk input username
         OutlinedTextField(
             value = username.value,
-            onValueChange = { newText -> username.value = newText },
+            onValueChange = {
+                username.value = it
+                erorMassage.value = ""
+                isError.value = false // Reset error when user types
+            },
             singleLine = true,
-            label = { Text("Username") }, // Pastikan label menggunakan lambda
+            label = { Text("Username") },
             modifier = Modifier
                 .fillMaxWidth()
+                .focusRequester(usernameFocusRequester)
                 .padding(bottom = 16.dp),
+            isError = isError.value,
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = EzemGreen,
-                cursorColor = EzemGreen,
-                focusedLabelColor = EzemGreen
+                focusedBorderColor = if (isError.value) Color.Red else EzemGreen,
+                unfocusedBorderColor = if (isError.value) Color.Red else Color.Gray,
+                cursorColor = if (isError.value) Color.Red else EzemGreen,
+                focusedLabelColor = if (isError.value) Color.Red else EzemGreen
             )
         )
-
 
         OutlinedTextField(
             value = password.value,
-            onValueChange = { newText -> password.value = newText },
+            onValueChange = { password.value = it
+                erorMassage.value = ""
+                isError.value = false // Reset error when user types
+                },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
-            label = { Text("Password") }, // Pastikan label menggunakan lambda
-            modifier = Modifier
-                .fillMaxWidth(),
+            label = { Text("Password") },
+            modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = EzemGreen,
-                cursorColor = EzemGreen,
-                focusedLabelColor = EzemGreen
+                focusedBorderColor = if (isError.value) Color.Red else EzemGreen,
+                unfocusedBorderColor = if (isError.value) Color.Red else Color.Gray,
+                cursorColor = if (isError.value) Color.Red else EzemGreen,
+                focusedLabelColor = if (isError.value) Color.Red else EzemGreen
             )
         )
 
-
         Spacer(modifier = Modifier.size(40.dp))
+        Text(erorMassage.value, color = Color.Red)
         Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .width(32.dp),
+            modifier = Modifier.fillMaxWidth(),
             onClick = {
-                login(username.value, password.value)
+                CoroutineScope(Dispatchers.IO).launch {
+                    val apiUrl = "http://$domain:5000/api/auth/"
+                    try {
+                        val url = URL(apiUrl)
+                        val connection = url.openConnection() as HttpURLConnection
+                        connection.requestMethod = "POST"
+                        connection.setRequestProperty("Content-Type", "application/json")
+                        connection.doOutput = true
+
+                        val requestBody = "{\"username\": \"${username.value}\", \"password\": \"${password.value}\"}"
+                        val outputStream: OutputStream = connection.outputStream
+                        outputStream.write(requestBody.toByteArray())
+                        outputStream.flush()
+
+                        val responseCode = connection.responseCode
+                        if (responseCode == 200) {
+                            val reader = BufferedReader(InputStreamReader(connection.inputStream))
+                            val responseBody = reader.readLine()
+                            reader.close()
+
+                            token = responseBody.toString()
+
+                            withContext(Dispatchers.Main) {
+                                isError.value = false
+                                navController.navigate("main")
+                            }
+
+                        } else if (responseCode == 404) {
+                            withContext(Dispatchers.Main) {
+                                isError.value = true
+                                erorMassage.value = "Make sure Username and Password are correct!"
+                                usernameFocusRequester.requestFocus()
+                            }
+                        } else {
+                            println("Error")
+                        }
+                        connection.disconnect()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        println("Fatal Error")
+                    }
+                }
             },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = EzemGreen
-            )
+            colors = ButtonDefaults.buttonColors(containerColor = EzemGreen)
         ) {
-            Text("LOGIN", fontFamily = poppinsBold)
+            Text("LOGIN")
         }
 
         Spacer(Modifier.size(12.dp))
         Row {
             Text("Don't Have an Account yet?  ")
-            Text("Create an Account",
+            Text(
+                "Create an Account",
                 color = EzemGreen,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.clickable {
-                    registerBtn()
+                    navController.navigate("register")
                 }
             )
         }
     }
 }
-
-
