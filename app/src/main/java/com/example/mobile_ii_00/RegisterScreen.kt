@@ -258,7 +258,7 @@ fun RegisterScreen(navController: NavController){
                         val requestBody = "{" +
                                 "\"username\": \"${username.value}\"," +
                                 "\"fullname\": \"${fullName.value}\"," +
-                                "\"emal\": \"${email.value}\"," +
+                                "\"email\": \"${email.value}\"," +
                                 "\"password\": \"${password.value}\"" +
                                 "}"
 
@@ -275,7 +275,7 @@ fun RegisterScreen(navController: NavController){
                             withContext(Dispatchers.Main) {
                                 isError.value = false
                                 token = responseBody.toString()
-                                navController.navigate("home")
+                                navController.navigate("main")
                             }
 
                         } else if (responseCode == 400) {
